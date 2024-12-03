@@ -32,7 +32,7 @@ app.use(
 app.get('/', (req, res) => {
 	mongoose
 		.connect(
-			`mongodb+srv://Muhammad_Yusuf:${process.env.DB_PASSWORD}@papay.qzqt3.mongodb.net/?retryWrites=true&w=majority&appName=Papay`
+			`mongodb+srv://Muhammad_Yusuf:${process.env.DB_PASSWORD}@papay.qzqt3.mongodb.net/GSS-IOT-MERN?retryWrites=true&w=majority`
 		)
 		.then(() => res.send('Successfully connted to Mongo-DB'))
 		.catch(error => res.status(200).send('MongoDB Atlas connection error:'))
@@ -49,7 +49,7 @@ const startServer = async () => {
 	try {
 		mongoose
 			.connect(
-				`mongodb+srv://Muhammad_Yusuf:${process.env.DB_PASSWORD}@papay.qzqt3.mongodb.net/?retryWrites=true&w=majority&appName=Papay`
+				`mongodb+srv://Muhammad_Yusuf:${process.env.DB_PASSWORD}@papay.qzqt3.mongodb.net/GSS-IOT-MERN?retryWrites=true&w=majority`
 			)
 			.then(() => console.log('MongoDB Atlas connected successfully'))
 			.catch(error => console.error('MongoDB Atlas connection error:', error))
