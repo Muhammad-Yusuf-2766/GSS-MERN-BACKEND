@@ -27,4 +27,4 @@ jobs:
       - name: Delete old container
         run: docker rm -f nodejs-app-container
       - name: Run Docker Container
-        run: docker run -d -p 3000:3000 --name nodejs-app-container -e MONGODB_PASSWORD='${{ secrets.DB_URL_ATLAS }}' muhammadyusuf2766/gss-backend
+        run: docker run -d -p 3000:3000 --name nodejs-app-container -e MONGODB_PASSWORD='${{ secrets.DB_PASSWORD }}' muhammadyusuf2766/gss-backend
