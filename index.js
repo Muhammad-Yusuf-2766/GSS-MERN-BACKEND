@@ -36,8 +36,7 @@ app.use(errorMiddleware)
 
 setupSocket(io)
 
-const PORT = process.env.PORT || 8080
-const passwordDb = 'mnxUWbD9i0DMyEjR'
+const PORT = process.env.PORT || 3000
 
 const startServer = async () => {
 	try {
