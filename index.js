@@ -9,26 +9,27 @@ const cors = require('cors')
 const errorMiddleware = require('./middlewares/error.middleware')
 const { Server } = require('socket.io')
 const { setupSocket } = require('./Service/Socket.service')
-
 const app = express()
 const server = http.createServer(app)
-const io = new Server(server, {
-	cors: {
-		origin: process.env.REACT_URL,
-		methods: ['GET', 'POST'],
-		credentials: true,
-	},
-})
 
 // Middlewares
 app.use(express.json())
 app.use(cookieParser())
 app.use(
 	cors({
-		origin: process.env.REACT_URL, // Vite ilovasining URL'si
+		origin: process.env.REACT_URL_EC2, // Vite ilovasining URL'si
 		credentials: true, // Cookie va boshqa ma'lumotlarni yuborish uchun
 	})
 )
+
+const io = new Server(server, {
+	cors: {
+		origin: process.env.REACT_URL_EC2,
+		methods: ['GET', 'POST'],
+		credentials: true,
+	},
+})
+
 app.get('/', (req, res) => {
 	mongoose
 		.connect(
