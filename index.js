@@ -13,18 +13,18 @@ const app = express()
 const server = http.createServer(app)
 
 // Middlewares
+const corsOptions = {
+	origin: 'http://43.203.125.106:3001/', // Specify the exact origin of your frontend app
+	credentials: true, // Allow cookies and authentication information
+}
+
 app.use(express.json())
 app.use(cookieParser())
-app.use(
-	cors({
-		origin: '*', // Vite ilovasining URL'si
-		credentials: true, // Cookie va boshqa ma'lumotlarni yuborish uchun
-	})
-)
+app.use(cors(corsOptions))
 
 const io = new Server(server, {
 	cors: {
-		origin: '*',
+		origin: 'http://43.203.125.106:3001/', // Specify the frontend's URL
 		methods: ['GET', 'POST'],
 		credentials: true,
 	},
