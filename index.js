@@ -12,19 +12,28 @@ const { setupSocket } = require('./Service/Socket.service')
 const app = express()
 const server = http.createServer(app)
 
-// Middlewares
-// const corsOptions = {
-// 	origin: 'http://43.203.125.106:3001/', // Specify the exact origin of your frontend app
-// 	credentials: true, // Allow cookies and authentication information
-// }
+// Ruxsat etilgan domenlar
+const allowedOrigins = ['http://infogssiot.com', 'http://www.infogssiot.com']
 
 app.use(express.json())
 app.use(cookieParser())
-app.use(cors({ origin: 'http://localhost:3001', credentials: true }))
+app.use(
+	cors({
+		origin: function (origin, callback) {
+			if (!origin || allowedOrigins.includes(origin)) {
+				callback(null, true)
+			} else {
+				callback(new Error('CORS policy violation'))
+			}
+		},
+		credentials: true,
+		n,
+	})
+) // Cookie'larni yuborish uchu
 
 const io = new Server(server, {
 	cors: {
-		origin: 'http://localhost:3001', // Specify the frontend's URL
+		origin: allowedOrigins, // Specify the frontend's URL
 		methods: ['GET', 'POST'],
 		credentials: true,
 	},
