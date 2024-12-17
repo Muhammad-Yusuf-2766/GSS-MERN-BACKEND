@@ -1,7 +1,6 @@
 const assert = require('assert')
 const UserService = require('../Service/User.service')
 const jwt = require('jsonwebtoken')
-const Definer = require('../Lib/errors')
 
 let userController = module.exports
 
@@ -85,39 +84,70 @@ userController.makeUser = async (req, res) => {
 	try {
 		console.log('POST: contr.User: Make-User', req.body)
 		const { user_id } = req.body
-		console.log(user_id)
 		const userService = new UserService()
 		const data = await userService.makeUserData(user_id)
-		console.log('Changed user', data)
-		res.json({ User: user_id })
+		res.json({ User: data })
 	} catch (error) {
 		console.log('ERROR: contr.User: Make-User', error)
 		res.json({ state: 'fail', message: error.message })
 	}
 }
 
-// ======   Session related  ======== //
-
-userController.checkSessions = (req, res) => {
-	console.log('POST: contr.User-check-self')
-	if (req.session?.user) {
-		res.json({ state: 'success', data: req.session.user })
-	} else {
-		res.json({ state: 'Fail', message: 'You are not authenticated' })
+userController.resetPwResquest = async (req, res) => {
+	try {
+		console.log('POST: contr.User: resetPwResquest', req.body)
+		const { user_email } = req.body
+		const userService = new UserService()
+		const result = await userService.resetPwResquest(user_email)
+		return res
+			.status(200)
+			.json({ state: result.state, message: result.message })
+	} catch (error) {
+		console.log('ERROR: contr.User: resetPwResquest', error)
+		res.json({ state: 'fail', message: error.message })
+	}
+}
+userController.resetPwVerify = async (req, res) => {
+	try {
+		console.log('POST: contr.User: resetPwVerify', req.body)
+		const { user_email, otp, new_password } = req.body
+		const userService = new UserService()
+		const result = await userService.resetPwVerify(
+			user_email,
+			otp,
+			new_password
+		)
+		return res
+			.status(200)
+			.json({ state: result.state, message: result.message })
+	} catch (error) {
+		console.log('ERROR: contr.User: resetPwResquest', error)
+		res.json({ state: 'fail', message: error.message })
 	}
 }
 
-userController.validateAuthUser = (req, res, next) => {
-	if (req.session?.user?.user_type === 'USER') {
-		req.user = req.session.user
-		console.log('Validated:::', req.user)
-		next()
-	} else
-		res.json({
-			state: 'Fail',
-			message: 'Only Authenticated Users with User type',
-		})
-}
+// ======   Session related  ======== //
+
+// userController.checkSessions = (req, res) => {
+// 	console.log('POST: contr.User-check-self')
+// 	if (req.session?.user) {
+// 		res.json({ state: 'success', data: req.session.user })
+// 	} else {
+// 		res.json({ state: 'Fail', message: 'You are not authenticated' })
+// 	}
+// }
+
+// userController.validateAuthUser = (req, res, next) => {
+// 	if (req.session?.user?.user_type === 'USER') {
+// 		req.user = req.session.user
+// 		console.log('Validated:::', req.user)
+// 		next()
+// 	} else
+// 		res.json({
+// 			state: 'Fail',
+// 			message: 'Only Authenticated Users with User type',
+// 		})
+// }
 
 // ======== JWT related Mehtod ======== //
 

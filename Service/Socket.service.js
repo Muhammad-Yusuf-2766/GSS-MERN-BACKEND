@@ -30,7 +30,7 @@ const setupSocket = serverIo => {
 	mqttEmitter.on('mqttMessage', async ({ serialNumber, data }) => {
 		const buildingId = await getBuildingIdByGatewaySerialNum(serialNumber)
 		if (buildingId) {
-			console.log('Socket emitting:', serialNumber, data)
+			// console.log('Socket emitting:', serialNumber, data)
 			io.emit(`mqttData_${buildingId}`, {
 				serialNumber,
 				data: JSON.stringify(data),

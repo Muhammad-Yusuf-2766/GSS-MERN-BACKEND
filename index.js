@@ -20,11 +20,11 @@ const server = http.createServer(app)
 
 app.use(express.json())
 app.use(cookieParser())
-app.use(cors({ origin: 'http://43.203.125.106:3001', credentials: true }))
+app.use(cors({ origin: 'http://localhost:3001', credentials: true }))
 
 const io = new Server(server, {
 	cors: {
-		origin: 'http://43.203.125.106:3001', // Specify the frontend's URL
+		origin: 'http://localhost:3001', // Specify the frontend's URL
 		methods: ['GET', 'POST'],
 		credentials: true,
 	},

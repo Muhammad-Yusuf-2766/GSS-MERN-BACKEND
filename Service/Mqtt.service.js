@@ -43,7 +43,6 @@ if (!isMessageListenerAdded) {
 		console.log(`MQTT_data ${serialNumber}: ${message}`)
 
 		if (topic.startsWith(Topic)) {
-			console.log('Node-topic-event...', data)
 			const eventData = {
 				gw_number: serialNumber,
 				doorNum: data.doorNum,

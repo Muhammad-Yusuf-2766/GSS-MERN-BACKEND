@@ -1,26 +1,48 @@
-// const BaseError = require('../errors/base.error')
-// const tokenService = require('../Service/Token.service')
+const UserService = require('../Service/User.service')
+const jwt = require('jsonwebtoken')
 
-// module.exports = function (req, res, next) {
-// 	try {
-// 		const authorization = req.headers.authorization
-// 		if (!authorization) {
-// 			return next(BaseError.UnauthorizedError())
-// 		}
+const retrieveAdminUser = async (req, res, next) => {
+	try {
+		console.log('retrieve-ADMIN')
+		const token = req.cookies['access_token']
+		const userService = new UserService()
+		const jwtUser = jwt.verify(token, process.env.ACCESS_SECRET_KEY)
+		const result = await userService.retrieveAdmin(jwtUser)
+		if (result.state === 'fail') {
+			return res
+				.status(403)
+				.json({ state: result.state, message: result.message })
+		}
 
-// 		const accessToken = authorization.split(' ')[1]
-// 		if (!accessToken) {
-// 			return next(BaseError.UnauthorizedError())
-// 		}
+		req.user = result.data
+		next()
+	} catch (err) {
+		console.log(`ERROR, cont/retrieveAuthMember, ${err}`)
+		res.status(401).json({ state: 'fail', message: 'Invalid or expired token' })
+	}
+}
 
-// 		const userData = tokenService.validateAccessToken(accessToken)
-// 		if (!userData) {
-// 			return next(BaseError.UnauthorizedError())
-// 		}
+const retrieveClientUser = async (req, res, next) => {
+	try {
+		const token = req.cookies['access_token']
+		const userService = new UserService()
+		const jwtUser = jwt.verify(token, process.env.ACCESS_SECRET_KEY)
+		const result = await userService.retrieveClient(jwtUser)
+		if (result.state === 'fail') {
+			return res
+				.status(403)
+				.json({ state: result.state, message: result.message })
+		}
 
-// 		req.user = userData
-// 		next()
-// 	} catch (error) {
-// 		return next(BaseError.UnauthorizedError())
-// 	}
-// }
+		req.user = result.data
+		next()
+	} catch (err) {
+		console.log(`ERROR, cont/retrieveAuthMember, ${err}`)
+		res.status(401).json({ state: 'fail', message: 'Invalid or expired token' })
+	}
+}
+
+module.exports = {
+	retrieveAdminUser,
+	retrieveClientUser,
+}

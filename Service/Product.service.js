@@ -274,22 +274,53 @@ class ProductService {
 
 	async getLastLogsData(gwSets) {
 		try {
-			const result = []
-			for (const gwNumber of gwSets) {
-				const lastLodgs = await this.logSchema
-					.findOne({
-						gw_number: { $in: gwNumber },
-					})
-					.sort({ createdAt: -1 })
-				if (lastLodgs) {
-					result.push(lastLodgs)
+			// Gatewaylarni topish
+			const gateways = await this.gateWaySchema.find({
+				serial_number: { $in: gwSets }, // gwSets dagi serial_numberlarga mos keladi
+			})
+
+			if (!gateways || gateways.length === 0) {
+				return new Error('Hech qanday gateway topilmadi')
+			}
+
+			// Topilgan gatewaylardan node id-larni yig'ish
+			const allNodeIds = gateways
+				.flatMap(gateway => gateway.nodes) // gateway.nodes arraylarini birlashtirish
+				.filter(Boolean) // null yoki undefined qiymatlarni olib tashlash
+
+			if (allNodeIds.length === 0) {
+				return new Error('Hech qanday node id topilmadi')
+			}
+
+			// Node id-larga mos bo'lgan node ma'lumotlarini olish
+			const nodesData = await this.nodeSchema.find(
+				{
+					_id: { $in: allNodeIds }, // barcha node id-larga mos bo'lgan node'larni topish
+				},
+				{
+					doorNum: 1, // Faqat doorNum maydonini olish
+					_id: 0, // _id ni olib tashlash (ixtiyoriy)
+				}
+			)
+			if (!nodesData || nodesData.length === 0) {
+				return new Error("Hech qanday node ma'lumotlari topilmadi")
+			}
+
+			// Har bir doorNum uchun oxirgi logni topish
+			const latestLogs = []
+			for (const { doorNum } of nodesData) {
+				const lastLog = await this.logSchema
+					.findOne({ doorNum })
+					.sort({ createdAt: -1 }) // Eng oxirgi log
+				if (lastLog) {
+					latestLogs.push(lastLog)
 				}
 			}
 
-			return result
+			return latestLogs
 		} catch (error) {
-			console.log(error)
-			throw error
+			console.error(error)
+			return error
 		}
 	}
 
