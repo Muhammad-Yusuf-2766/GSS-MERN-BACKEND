@@ -5,7 +5,6 @@ const BaseError = require('../errors/base.error')
 const nodemailer = require('nodemailer')
 const crypto = require('crypto')
 const Otp = require('../Schema/Otp.model')
-const { TbEyeSearch } = require('react-icons/tb')
 
 class UserService {
 	constructor() {
