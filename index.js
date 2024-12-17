@@ -27,7 +27,6 @@ app.use(
 			}
 		},
 		credentials: true,
-		n,
 	})
 ) // Cookie'larni yuborish uchu
 
