@@ -13,7 +13,11 @@ const app = express()
 const server = http.createServer(app)
 
 // Ruxsat etilgan domenlar
-const allowedOrigins = ['http://infogssiot.com', 'http://www.infogssiot.com']
+const allowedOrigins = [
+	'http://infogssiot.com',
+	'http://www.infogssiot.com',
+	'http://43.203.125.106:3001',
+]
 
 app.use(express.json())
 app.use(cookieParser())
