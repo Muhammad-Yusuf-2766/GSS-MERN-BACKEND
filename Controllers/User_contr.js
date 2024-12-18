@@ -39,8 +39,8 @@ userController.login = async (req, res, next) => {
 		res.cookie('access_token', token, {
 			maxAge: 10 * 24 * 3600 * 1000,
 			httpOnly: false,
-			secure: true, // faqat https da cookie ni saqlaydi,
-			sameSite: 'None',
+			// secure: true, // faqat https da cookie ni saqlaydi,
+			// sameSite: 'None',
 			path: '/', // barcha endpointlar uchun
 		})
 
