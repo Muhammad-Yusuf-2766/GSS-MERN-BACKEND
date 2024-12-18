@@ -17,6 +17,8 @@ jobs:
         run: docker build -t muhammadyusuf2766/gss-backend -f DockerFile .
       - name: Publish Image to docker hub
         run: docker push muhammadyusuf2766/gss-backend:latest
+      - name: Remove unused Docker images
+        run: docker system prune -af
 
   deploy:
     needs: build
