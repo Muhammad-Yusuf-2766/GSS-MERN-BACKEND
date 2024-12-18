@@ -16,7 +16,7 @@ const server = http.createServer(app)
 const allowedOrigins = [
 	'https://infogssiot.com',
 	'https://www.infogssiot.com',
-	'https://43.203.125.106:3001',
+	'http://43.203.125.106:3001',
 	'http://localhost:3001',
 ]
 
