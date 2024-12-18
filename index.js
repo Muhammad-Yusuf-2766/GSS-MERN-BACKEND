@@ -14,20 +14,26 @@ const server = http.createServer(app)
 
 // Ruxsat etilgan domenlar
 const allowedOrigins = [
-	'http://infogssiot.com',
-	'http://www.infogssiot.com',
-	'http://43.203.125.106:3001',
-	// 'http://localhost:3001',
+	'https://infogssiot.com',
+	'https://www.infogssiot.com',
+	'https://43.203.125.106:3001',
+	'http://localhost:3001',
 ]
 
 app.use(express.json())
 app.use(cookieParser())
 app.use(
 	cors({
-		origin: allowedOrigins,
+		origin: function (origin, callback) {
+			if (!origin || allowedOrigins.includes(origin)) {
+				callback(null, true)
+			} else {
+				callback(new Error('CORS policy violation'))
+			}
+		},
 		credentials: true,
 	})
-) // Cookie'larni yuborish uchun
+) // Cookie'larni yuborish uchu
 
 const io = new Server(server, {
 	cors: {
