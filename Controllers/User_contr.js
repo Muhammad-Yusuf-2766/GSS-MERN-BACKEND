@@ -1,6 +1,7 @@
 const assert = require('assert')
 const UserService = require('../Service/User.service')
 const jwt = require('jsonwebtoken')
+const path = require('path')
 
 let userController = module.exports
 
@@ -38,6 +39,9 @@ userController.login = async (req, res, next) => {
 		res.cookie('access_token', token, {
 			maxAge: 10 * 24 * 3600 * 1000,
 			httpOnly: false,
+			secure: false, // faqat https da cookie ni saqlaydi,
+			sameSite: 'Lax',
+			path: '/', // barcha endpointlar uchun
 		})
 
 		return res.status(200).json({ state: 'Success', data: user, token: token })
