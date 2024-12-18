@@ -40,7 +40,7 @@ userController.login = async (req, res, next) => {
 			maxAge: 10 * 24 * 3600 * 1000,
 			httpOnly: false,
 			secure: false, // faqat https da cookie ni saqlaydi,
-			sameSite: 'Lax',
+			sameSite: 'Strict',
 			path: '/', // barcha endpointlar uchun
 		})
 
