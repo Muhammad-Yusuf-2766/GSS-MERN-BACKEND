@@ -11,6 +11,7 @@ const { retrieveAdminUser } = require('../middlewares/auth.middleware')
 
 user_router.post('/signup', userController.signUp)
 user_router.post('/login', userController.login)
+user_router.get('/check-me', userController.checkMe)
 user_router.get('/logout', userController.logout)
 // user_router.get('/refresh', userController.refreshToken)
 // user_router.post('/check-self', userController.checkSessions)

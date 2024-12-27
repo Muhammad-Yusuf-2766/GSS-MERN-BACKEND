@@ -2,6 +2,7 @@ const assert = require('assert')
 const UserService = require('../Service/User.service')
 const jwt = require('jsonwebtoken')
 const path = require('path')
+const UserSchema = require('../Schema/User.model')
 
 let userController = module.exports
 
@@ -16,7 +17,7 @@ userController.signUp = async (req, res, next) => {
 		const token = userController.createToken(new_user)
 		res.cookie('access_token', token, {
 			maxAge: 10 * 24 * 3600 * 1000,
-			httpOnly: false,
+			httpOnly: true,
 		})
 
 		res.status(200).json({ state: 'Success', data: new_user })
@@ -38,7 +39,7 @@ userController.login = async (req, res, next) => {
 		const token = userController.createToken(user)
 		res.cookie('access_token', token, {
 			maxAge: 10 * 24 * 3600 * 1000,
-			httpOnly: false,
+			httpOnly: true,
 			// sameSite: 'None', // Cookie'ni cross-site so'rovlarida saqlash
 			// secure: false, // faqat https da cookie ni saqlaydi,
 			// sameSite: 'None',
@@ -49,6 +50,22 @@ userController.login = async (req, res, next) => {
 	} catch (error) {
 		console.log('ERROR: contr.User-Login', error)
 		res.json({ state: 'Fail', message: error.message })
+	}
+}
+
+userController.checkMe = async (req, res) => {
+	try {
+		console.log('Get: Check me')
+		const token = req.cookies.access_token
+		if (!token) return res.status(401).send('Unauthorized')
+		const isVerified = jwt.verify(token, process.env.ACCESS_SECRET_KEY)
+		const user = await UserSchema.findById(isVerified._id)
+		if (!user) {
+			return res.json({ state: 'Fail', user: 'Not found' })
+		}
+		return res.json({ state: 'Success', user: user })
+	} catch (error) {
+		res.send(error)
 	}
 }
 
