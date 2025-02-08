@@ -54,7 +54,7 @@ if (!isMessageListenerAdded) {
 			mqttEmitter.emit('mqttMessage', { serialNumber, data })
 		} else if (topic.startsWith(gwResTopic)) {
 			console.log('Gateway-creation event:', data)
-			getGwRes(data)
+			emitGwRes(data)
 		}
 	})
 	isMessageListenerAdded = true
@@ -64,7 +64,7 @@ mqttClient.on('error', error => {
 	console.error('MQTT connection error:', error)
 })
 
-const getGwRes = data => {
+const emitGwRes = data => {
 	mqttEmitter.emit('gwPubRes', data)
 }
 
